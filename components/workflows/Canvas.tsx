@@ -135,11 +135,11 @@ export default function Canvas() {
           nodeTypes={nodeTypes}
         >
           <Background />
-          <Controls orientation="horizontal" position="bottom-center" />
+          <Controls orientation="horizontal"  position="bottom-center" />
 
           <MiniMap
             style={{
-              backgroundColor: '#1f2937',
+              backgroundColor: '#2B2B2F',
               border: '1px solid #374151',
               borderRadius: '8px',
             }}

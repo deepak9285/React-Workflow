@@ -33,3 +33,38 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.react-flow__controls {
+  background: #1f1f23;
+  border-radius: 14px;
+  border: 1px solid #2b2b30;
+  padding: 10px 10px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.35);
+  gap: 6px;
+}
+
+.react-flow__controls-button {
+  background: transparent !important;
+  border: none !important;
+  color: #e5e7eb !important;
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+}
+
+.react-flow__controls-button:hover {
+  background: #2d2d32 !important;
+  color: #ffffff !important;
+}
+
+.react-flow__controls-button:active,
+.react-flow__controls-button:focus {
+  background: #fef9c3 !important;  /* pale yellow */
+  color: #0f172a !important;
+}
+
+/* Remove icon white fill */
+.react-flow__controls-button svg {
+  fill: none !important;
+  stroke: currentColor !important;
+}
