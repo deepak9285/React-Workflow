@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Grid background pattern */
+.grid-background {
+  background-image: 
+    linear-gradient(0deg, transparent 24%, rgba(200, 200, 200, 0.15) 25%, rgba(200, 200, 200, 0.15) 26%, transparent 27%, transparent 74%, rgba(200, 200, 200, 0.15) 75%, rgba(200, 200, 200, 0.15) 76%, transparent 77%, transparent),
+    linear-gradient(90deg, transparent 24%, rgba(200, 200, 200, 0.15) 25%, rgba(200, 200, 200, 0.15) 26%, transparent 27%, transparent 74%, rgba(200, 200, 200, 0.15) 75%, rgba(200, 200, 200, 0.15) 76%, transparent 77%, transparent);
+  background-size: 60px 60px;
+}
+
+.grid-background-dark {
+  background-image: 
+    linear-gradient(0deg, transparent 24%, rgba(100, 100, 100, 0.1) 25%, rgba(100, 100, 100, 0.1) 26%, transparent 27%, transparent 74%, rgba(100, 100, 100, 0.1) 75%, rgba(100, 100, 100, 0.1) 76%, transparent 77%, transparent),
+    linear-gradient(90deg, transparent 24%, rgba(100, 100, 100, 0.1) 25%, rgba(100, 100, 100, 0.1) 26%, transparent 27%, transparent 74%, rgba(100, 100, 100, 0.1) 75%, rgba(100, 100, 100, 0.1) 76%, transparent 77%, transparent);
+  background-size: 60px 60px;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-zinc-50 dark:bg-black;
+}

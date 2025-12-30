@@ -1,0 +1,59 @@
+[
+  {
+    "name": "first workflow",
+    "description": "",
+    "nodes": [
+      {
+        "id": "textNode-1766916439012",
+        "position": {
+          "x": 507.0104217529297,
+          "y": 205
+        },
+        "data": {
+          "label": "Text",
+          "text": ""
+        },
+        "type": "textNode",
+        "measured": {
+          "width": 384,
+          "height": 297
+        },
+        "selected": true
+      },
+      {
+        "id": "imageNode-1766916445447",
+        "position": {
+          "x": 1012.0104217529297,
+          "y": 192
+        },
+        "data": {
+          "label": "Upload Image"
+        },
+        "type": "imageNode",
+        "measured": {
+          "width": 320,
+          "height": 375
+        }
+      },
+      {
+        "id": "llmNode-1766916448689",
+        "position": {
+          "x": 315.0104217529297,
+          "y": 600
+        },
+        "data": {
+          "label": "Any LLM"
+        },
+        "type": "llmNode",
+        "measured": {
+          "width": 384,
+          "height": 411
+        }
+      }
+    ],
+    "edges": [],
+    "id": "workflow-1766916458315",
+    "createdAt": "2025-12-28T10:07:38.315Z",
+    "updatedAt": "2025-12-28T10:07:38.315Z"
+  }
+]
