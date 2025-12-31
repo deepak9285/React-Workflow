@@ -69,9 +69,8 @@ export async function POST(req: NextRequest) {
         temperature,
         maxOutputTokens: maxTokens,
       },
-      systemInstruction: systemPrompt
-        ? { parts: [{ text: systemPrompt }] }
-        : undefined,
+      systemInstruction: systemPrompt,
+
     })
 
 
