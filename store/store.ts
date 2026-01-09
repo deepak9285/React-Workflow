@@ -1,5 +1,11 @@
 import { create } from 'zustand'
 import { Node, Edge, Connection, addEdge, applyNodeChanges, applyEdgeChanges, NodeChange, EdgeChange } from '@xyflow/react'
+import { validateConnection, validateWorkflow } from '@/lib/validation'
+
+interface SnapShot{
+  nodes: Node[];
+  edges: Edge[];
+}
 
 interface CanvasState {
   nodes: Node[]
@@ -14,6 +20,7 @@ interface CanvasState {
   workflows: any[]
   showLoadModal: boolean
   settingsOpen: boolean
+  connectionError: string | null
   saveNodeLabel: (nodeId: string, label: string) => void
   settingsPos: { x: number; y: number }
   settingsTarget: string | null
@@ -35,6 +42,7 @@ interface CanvasState {
   setSettingsTarget: (target: string | null) => void
   setSettingsActions: (actions: any) => void
   setViewBackup: (backup: { nodes: Node[]; edges: Edge[] } | null) => void
+  setConnectionError: (error: string | null) => void
   handleNodesChange: (changes: NodeChange[]) => void
   handleEdgesChange: (changes: EdgeChange[]) => void
   handleConnect: (connection: Connection) => void
@@ -74,6 +82,7 @@ export const useCanvasStore = create<CanvasState>((set, get) => ({
   workflows: [],
   showLoadModal: false,
   settingsOpen: false,
+  connectionError: null,
   settingsPos: { x: 0, y: 0 },
   settingsTarget: null,
   settingsActions: {},
@@ -123,6 +132,8 @@ export const useCanvasStore = create<CanvasState>((set, get) => ({
   
   setViewBackup: (backup) => set({ viewBackup: backup }),
 
+  setConnectionError: (error) => set({ connectionError: error }),
+
   handleNodesChange: (changes) => {
     set((state) => {
       const updatedNodes = applyNodeChanges(changes, state.nodes)
@@ -143,6 +154,18 @@ export const useCanvasStore = create<CanvasState>((set, get) => ({
   },
 
   handleConnect: (connection) => {
+    const { nodes, edges, setConnectionError } = get()
+
+    const validation = validateConnection(nodes, edges, connection)
+    
+    if (!validation.valid) {
+      // Set error message
+      setConnectionError(validation.error || 'Invalid connection')
+      // Clear error after 3 seconds
+      setTimeout(() => setConnectionError(null), 3000)
+      return
+    }
+
     const newEdge = {
       ...connection,
       style: {
@@ -152,6 +175,7 @@ export const useCanvasStore = create<CanvasState>((set, get) => ({
     }
     set((state) => ({
       edges: addEdge(newEdge, state.edges),
+      connectionError: null,
     }))
   },
 
@@ -456,6 +480,15 @@ saveNodeLabel: (nodeId:any, label:any) => {
 
           if (!jsonData.edges || !Array.isArray(jsonData.edges)) {
             alert('Invalid workflow file: missing or invalid edges')
+            return
+          }
+
+          // Validate the workflow structure
+          const validation = validateWorkflow(jsonData.nodes, jsonData.edges)
+          if (!validation.valid) {
+            alert(
+              `Invalid workflow structure:\n\n${validation.errors.join('\n')}`
+            )
             return
           }
 

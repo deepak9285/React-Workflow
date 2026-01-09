@@ -15,7 +15,7 @@ export default function LLMNode({ data, id }: { data: LLMNodeData; id: string })
 
   const [output, setOutput] = useState(data.output || '');
   const [showMenu, setShowMenu] = useState(false);
-  const [inputCount, setInputCount] = useState(3);
+  const [inputCount, setInputCount] = useState(2);
   const [isNodeHovered, setIsNodeHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,7 +24,8 @@ export default function LLMNode({ data, id }: { data: LLMNodeData; id: string })
   const [temperature, setTemperature] = useState(0.7);
   const nodes = useNodes();
   const edges = useEdges();
-  const inputLabels = ['Prompt', 'System Prompt', 'Image 1'];
+  const { handleNodeDataChange } = useCanvasStore();
+  const inputLabels = ['Prompt', 'Image'];
   
   const geminiModels = [
     'gemini-2.0-flash',
@@ -54,10 +55,18 @@ export default function LLMNode({ data, id }: { data: LLMNodeData; id: string })
       const sourceNode = nodes.find((node) => node.id === edge.source);
       console.log('Checking source node:', sourceNode);
 
+      // Check for text node input
       if (sourceNode && sourceNode.type === 'textNode' && sourceNode.data) {
         const text = sourceNode.data.text || '';
         console.log('Found text from node:', text);
         if (text) return text;
+      }
+
+      // Check for LLM node output
+      if (sourceNode && sourceNode.type === 'llmNode' && sourceNode.data) {
+        const llmOutput = sourceNode.data.output || '';
+        console.log('Found output from LLM node:', llmOutput);
+        if (llmOutput) return llmOutput;
       }
     }
 
@@ -144,7 +153,7 @@ export default function LLMNode({ data, id }: { data: LLMNodeData; id: string })
         prompt,
         temperature: temperature,
         maxTokens: 1000,
-        model: selectedModel,
+     //   model: selectedModel,
       };
 
       if (images && images.length > 0) {
@@ -165,6 +174,8 @@ export default function LLMNode({ data, id }: { data: LLMNodeData; id: string })
         setOutput('');
       } else if (result.success) {
         setOutput(result.response);
+        // Update node data in store so connected nodes can read the output
+        handleNodeDataChange(id, { output: result.response });
       } else {
         setError('Unknown error occurred');
         setOutput('');
@@ -242,21 +253,12 @@ export default function LLMNode({ data, id }: { data: LLMNodeData; id: string })
         </div>
       </div>
 
-      <div className="px-6 py-4 bg-[#2B2B2F] border-t border-gray-700 flex items-center justify-between gap-3">
-        <button
-          onClick={handleAddInput}
-          className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors text-sm font-medium"
-        >
-          <span className="text-lg">+</span>
-          <span>Add another image input</span>
-        </button>
-
+      <div className="px-6 py-4 justify-end bg-[#2B2B2F] border-t border-gray-700 flex items-center justify-between gap-3">
         <button
           onClick={() =>  handleRunModel()}
           disabled={isLoading}
           className="bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-2 rounded font-medium text-sm transition-colors flex items-center gap-2"
         >
-          <span>{isLoading ? '⟳' : '→'}</span>
           <span>{isLoading ? <Loader />: 'Run Model'}</span>
         </button>
       </div>

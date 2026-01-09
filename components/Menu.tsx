@@ -1,7 +1,7 @@
 import { useCanvasStore } from '@/store/store';
 
 export default function Menu({ id }: { id: string }) {
-const { duplicateNode, renameNode, lockNode, deleteNode } = useCanvasStore();
+const { duplicateNode, renameNode, unlockNode, lockNode, deleteNode } = useCanvasStore();
 return (
      <div className="absolute right-0 mt-20 ml-30 w-40 bg-[#212126] border border-gray-700 rounded-lg shadow-lg z-50">
               <button
